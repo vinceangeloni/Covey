@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e2725b"/>
+      <stop offset="1" stop-color="#c8553d"/>
+    </linearGradient>
+  </defs>
+  <!-- Full-bleed, opaque, unrounded square: iOS applies its own corner mask and shine. -->
+  <rect width="1024" height="1024" fill="url(#bg)"/>
+  <!-- a covey: three birds in flight, drawn as simple double-arc strokes -->
+  <g fill="none" stroke="#f4efe8" stroke-width="36" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M192 672 C272 552 352 552 432 632 C512 552 592 552 672 672" opacity="0.55"/>
+    <path d="M272 512 C352 392 432 392 512 472 C592 392 672 392 752 512" opacity="0.8"/>
+    <path d="M352 352 C432 232 512 232 592 312 C672 232 752 232 832 352"/>
+  </g>
+</svg>

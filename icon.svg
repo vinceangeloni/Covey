@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#e2725b"/>
+      <stop offset="1" stop-color="#c8553d"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <!-- a covey: three birds in flight, drawn as simple double-arc strokes -->
+  <g fill="none" stroke="#f4efe8" stroke-width="18" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M96 336 C136 276 176 276 216 316 C256 276 296 276 336 336" opacity="0.55"/>
+    <path d="M136 256 C176 196 216 196 256 236 C296 196 336 196 376 256" opacity="0.8"/>
+    <path d="M176 176 C216 116 256 116 296 156 C336 116 376 116 416 176"/>
+  </g>
+</svg>
