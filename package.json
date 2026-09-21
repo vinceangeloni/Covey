@@ -1,6 +1,6 @@
 {
   "name": "covey",
-  "private": true,
+  "private": false,
   "type": "module",
   "scripts": {
     "start": "node --env-file=.env server.js"
