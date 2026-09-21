@@ -40,7 +40,37 @@ const wrap = fn => async (req, res) => {
   try { await fn(req, res); } catch (e) { ctx = null; console.error(e); res.status(500).json({ error: e.message }); }
 };
 
+// Live status line so a long-running server doesn't look hung in an
+// interactive terminal - a static one-liner with no further output can look
+// identical to a frozen process. Falls back to a single static log line when
+// stdout isn't a TTY (piped to a file, process manager, etc.) so logs stay clean.
+let reqCount = 0;
+function startStatusLine(url) {
+  if (!process.stdout.isTTY) {
+    console.log(`Covey is running on ${url}`);
+    return;
+  }
+  const frames = ['\u280b', '\u2819', '\u2839', '\u2838', '\u283c', '\u2834', '\u2826', '\u2827', '\u2807', '\u280f'];
+  const started = Date.now();
+  let frame = 0;
+  const render = () => {
+    const elapsed = Math.max(0, Math.floor((Date.now() - started) / 1000));
+    const mins = String(Math.floor(elapsed / 60)).padStart(2, '0');
+    const secs = String(elapsed % 60).padStart(2, '0');
+    const spinner = frames[frame = (frame + 1) % frames.length];
+    const requests = `${reqCount} request${reqCount === 1 ? '' : 's'} served`;
+    process.stdout.write(`\r\x1b[2K\x1b[36m${spinner}\x1b[0m Covey is running on \x1b[1m${url}\x1b[0m  \u00b7  up ${mins}:${secs}  \u00b7  ${requests}`);
+  };
+  render();
+  const timer = setInterval(render, 120);
+  timer.unref();
+  const cleanup = () => { process.stdout.write('\n'); process.exit(0); };
+  process.once('SIGINT', cleanup);
+  process.once('SIGTERM', cleanup);
+}
+
 const app = express();
+app.use((_req, _res, next) => { reqCount++; next(); });
 app.use(express.json());
 const here = path.dirname(fileURLToPath(import.meta.url));
 app.get('/', (_req, res) => {
@@ -98,4 +128,4 @@ app.delete('/api/events', wrap(async (req, res) => {
   res.json({ ok: true });
 }));
 
-app.listen(PORT, () => console.log(`Covey is running on http://localhost:${PORT}`));
+app.listen(PORT, () => startStatusLine(`http://localhost:${PORT}`));
