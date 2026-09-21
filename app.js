@@ -1,3 +1,13 @@
+            /*
+             * Covey browser application.
+             *
+             * app.js owns the interactive calendar: local state, iCloud API
+             * calls, rendering, preferences, settings, and input handling.
+             * It expects theme.js to have initialized the global GT object
+             * before this script runs, and expects the DOM from index.html.
+             */
+
+            // Inline SVG paths keep the app independent of an icon runtime.
             // Lucide icons (inlined)
             const P = {
                 "chevron-left": '<path d="m15 18-6-6 6-6"/>',
@@ -28,7 +38,9 @@
                 '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
                 P[n] +
                 "</svg>";
-            // Family members. Only entries with on:true appear as filters and in the "who" picker.
+            // Calendar colors and family filters are intentionally kept in one
+            // place so event rendering and settings use the same definitions.
+            // Only entries with on:true appear as filters and in the "who" picker.
             // The others are kept (they still color older events) so a person can be re-added by setting on:true.
             const M = [
                 { n: "Parent 1", c: "#f8c8c0", d: "#b8503f", on: false },
@@ -113,6 +125,8 @@
                 return iso(d);
             };
             const sunday = (k) => addDays(k, -parse(k).getDay());
+            // Restore the user's calendar and appearance preferences before the
+            // first render. Calendar events use a separate local preview store.
             let days = 5,
                 txt = "md",
                 pal = "sand",
@@ -170,6 +184,8 @@
             try {
                 local = JSON.parse(localStorage.getItem("gaggle") || "[]");
             } catch (e) {}
+            // Demo mode persists events locally; server mode persists them in
+            // iCloud and only uses these browser stores for UI preferences.
             const saveLocal = () => {
                 try {
                     localStorage.setItem("gaggle", JSON.stringify(local));
@@ -193,6 +209,7 @@
                     );
                 } catch (e) {}
             };
+            // Keep connection and preview-mode feedback in every status region.
             const status = (m) => {
                 const t =
                     m ||
@@ -244,6 +261,8 @@
                 if (x != null) e.textContent = x;
                 return e;
             }
+            // All server-backed event operations go through this small JSON API
+            // wrapper so errors are surfaced consistently in the UI.
             async function api(method, url, body) {
                 const r = await fetch(url, {
                     method,
@@ -267,6 +286,8 @@
                     ]),
                 ];
             }
+            // Load only the months needed by the current view. In preview mode,
+            // the same filtering is performed against the local event store.
             async function load() {
                 try {
                     const p = await Promise.all(
@@ -324,6 +345,8 @@
                 saveSet();
                 load();
             }
+            // Theme changes are delegated to theme.js; this layer decides which
+            // mode is currently effective, including temporary manual overrides.
             const sysMode = () =>
                 matchMedia("(prefers-color-scheme: dark)").matches
                     ? "dark"
@@ -383,6 +406,8 @@
                 sheet = false;
                 render();
             }
+            // Month and week views share the same event model but have separate
+            // layout paths because the week view is a time-grid.
             function monthCell(k, num, list, max, td) {
                 const c = el(
                     "button",
@@ -428,6 +453,8 @@
             const trange = (e) =>
                 tfmt(e.tm) + (e.te && e.te !== e.tm ? " – " + tfmt(e.te) : "");
             let needScroll = true;
+            // Scrolling or navigating starts a quiet timer that returns the view
+            // to the current day and time after the user has stopped interacting.
             const NOW_IDLE_MS = 3 * 60 * 1000; // how long to wait after the user stops interacting before snapping back to "now"
             let nowIdleTimer = null,
                 suppressScrollEvents = false;
@@ -447,6 +474,8 @@
                 clearTimeout(nowIdleTimer);
                 nowIdleTimer = setTimeout(goToNow, NOW_IDLE_MS);
             }
+            // Secondary navigation fades while the calendar is idle, but any
+            // pointer, touch, keyboard, or wheel activity brings it back.
             const CHROME_IDLE_MS = 6000; // hide nav chrome after this long without interaction
             let chromeIdleTimer = null;
             function wakeChrome() {
@@ -858,6 +887,8 @@
                     l.append(r);
                 });
             }
+            // Settings content is rendered on demand so each tab reflects the
+            // current state without duplicating controls in the HTML.
             function renderTabs() {
                 const tb = $("stabs");
                 tb.innerHTML = "";
@@ -1079,6 +1110,8 @@
                 $("time").style.gridColumn =
                     addKind === "dinner" || who ? "" : "1 / 3";
             }
+            // Create an event locally in preview mode or send it to the server,
+            // then reload the active range so the new event is rendered normally.
             async function add() {
                 const t = $("title").value.trim();
                 if (!t) return;
@@ -1106,6 +1139,8 @@
                     status(e.message);
                 }
             }
+            // Wire the static controls from index.html to the state and render
+            // functions above, then perform the initial data load.
             $("go").onclick = add;
             $("title").onkeydown = (e) => {
                 if (e.key === "Enter") add();
