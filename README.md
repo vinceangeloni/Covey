@@ -1,6 +1,6 @@
 # Covey
 
-Covey is a minimal, family-focused calendar that brings your iCloud calendars into a calm, focused web interface. It can run locally on a computer or server and can be added to an iPhone or iPad Home Screen like an app.
+Covey is a minimal, family-focused calendar that brings your iCloud calendars into beautifully designed interface that can live anywhere in your home. It can run locally on a computer or server or can be added to an iPad Home Screen like an app. No third party services or subscriptions needed. 
 
 ## Features
 
@@ -16,6 +16,12 @@ Covey is a minimal, family-focused calendar that brings your iCloud calendars in
 - Responsive layout for desktop and mobile devices
 - App icon, launch splash screen, and iOS Home Screen support
 - Open-source project designed to run on your own infrastructure
+
+## Calendars
+
+Covey comes with support for three calendars out of the box. A family calendar for all family activity, dinner calendar to track meals and reminders calendar for general family reminders.
+
+In the future we will be adding support for separate individual calendars. 
 
 ## Requirements
 
@@ -100,7 +106,7 @@ Interface preferences—such as theme, text size, selected view, and calendar vi
 
 Your calendar data remains in iCloud, subject to Apple's account and calendar settings.
 
-## Add Covey to an iPhone or iPad
+## Add Covey to an iPad Home Screen
 
 Run Covey on a computer or server that your device can reach, then open its address in Safari on iOS or iPadOS. Use **Share → Add to Home Screen**.
 
