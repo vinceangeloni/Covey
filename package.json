@@ -1,5 +1,6 @@
 {
-  "name": "covey",
+  "name": "covey-calendar",
+  "version": "0.0.5",
   "private": false,
   "type": "module",
   "scripts": {
