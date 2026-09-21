@@ -117,3 +117,21 @@ input, select {
     animation: none;
   }
 }
+
+/* Ambient mode: fade the nav chrome and add button out after a period of no
+   interaction, leaving just the clock. Any tap/click/mouse move/key/scroll
+   brings it back. */
+.idle-fade {
+  transition: opacity 0.8s ease;
+}
+
+body.chrome-idle .idle-fade {
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .idle-fade {
+    transition: none;
+  }
+}

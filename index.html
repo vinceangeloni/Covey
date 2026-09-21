@@ -291,12 +291,12 @@
                 ></div>
             </div>
         </div>
-        <div class="h-full flex flex-col p-3">
+        <div class="h-full flex flex-col p-3 pt-1">
             <section class="flex-1 min-w-0 min-h-0 flex flex-col">
                 <header
                     class="flex items-center gap-2 mb-2 flex-wrap landscape:grid landscape:grid-cols-[1fr_auto_1fr]"
                 >
-                    <div class="flex items-center gap-2 min-w-0">
+                    <div class="flex items-center gap-2 min-w-0 idle-fade">
                         <button
                             id="prev"
                             class="w-10 h-10 grid place-items-center rounded-full border border-line bg-card"
@@ -313,7 +313,7 @@
                         </button>
                         <h1
                             id="mon"
-                            class="text-lg lg:text-xl font-bold mx-1"
+                            class="text-lg lg:text-xl font-medium mx-1"
                         ></h1>
                         <button
                             id="todaybtn"
@@ -336,23 +336,23 @@
                     </div>
                     <div
                         id="clock"
-                        class="hidden landscape:block text-xl lg:text-2xl font-bold tabular-nums text-center"
+                        class="hidden landscape:block text-xl lg:text-2xl font-medium tabular-nums text-center"
                     ></div>
                     <div
-                        class="ml-auto flex items-center gap-2 justify-self-end"
+                        class="ml-auto flex items-center gap-2 justify-self-end idle-fade"
                     >
                         <div
                             class="flex rounded-full border border-line bg-card p-0.5"
                         >
                             <button
                                 id="vm"
-                                class="h-9 px-4 rounded-full text-sm font-semibold"
+                                class="h-9 px-4 rounded-full text-sm font-medium"
                             >
                                 Month
                             </button>
                             <button
                                 id="vw"
-                                class="h-9 px-4 rounded-full text-sm font-semibold"
+                                class="h-9 px-4 rounded-full text-sm font-medium"
                             >
                                 Week
                             </button>
@@ -413,7 +413,7 @@
 
         <button
             id="addbtn"
-            class="fixed z-10 w-14 h-14 rounded-full bg-accent text-on shadow-lg grid place-items-center"
+            class="fixed z-10 w-14 h-14 rounded-full bg-accent text-on shadow-lg grid place-items-center idle-fade"
             style="
                 right: calc(env(safe-area-inset-right, 0px) + 1rem);
                 bottom: calc(env(safe-area-inset-bottom, 0px) + 1rem);
@@ -1076,6 +1076,16 @@
                 clearTimeout(nowIdleTimer);
                 nowIdleTimer = setTimeout(goToNow, NOW_IDLE_MS);
             }
+            const CHROME_IDLE_MS = 6000; // hide nav chrome after this long without interaction
+            let chromeIdleTimer = null;
+            function wakeChrome() {
+                document.body.classList.remove("chrome-idle");
+                clearTimeout(chromeIdleTimer);
+                chromeIdleTimer = setTimeout(() => {
+                    if (!sheet && !setOpen)
+                        document.body.classList.add("chrome-idle");
+                }, CHROME_IDLE_MS);
+            }
             function layoutDay(list) {
                 const items = list
                     .filter((e) => e.tm)
@@ -1154,7 +1164,7 @@
                         ),
                         el(
                             "span",
-                            "text-2xl lg:text-3xl font-bold w-10 h-10 lg:w-12 lg:h-12 grid place-items-center rounded-full " +
+                            "text-2xl lg:text-3xl font-medium w-10 h-10 lg:w-12 lg:h-12 grid place-items-center rounded-full " +
                                 (k === td ? "bg-accent text-on" : ""),
                             d.getDate(),
                         ),
@@ -1803,6 +1813,13 @@
                 if (suppressScrollEvents) return;
                 armIdleReset();
             });
+            ["pointerdown", "pointermove", "touchstart", "keydown", "wheel"].forEach(
+                (evt) =>
+                    document.addEventListener(evt, wakeChrome, {
+                        passive: true,
+                    }),
+            );
+            wakeChrome();
             setInterval(load, 60000);
             setInterval(tick, 10000);
             document.querySelectorAll("[data-i]").forEach((e) => {
