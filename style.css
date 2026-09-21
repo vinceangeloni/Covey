@@ -1,7 +1,13 @@
+@font-face {
+  font-family: "Inter";
+  src: url(fonts/Inter/Inter-VariableFont_opsz,wght.ttf) format('truetype');
+}
+
 :root {
   box-sizing: border-box;
   padding-top: env(safe-area-inset-top, 0px);
   padding-bottom: env(safe-area-inset-bottom, 0px);
+  font-family: "Inter",serif;
   color-scheme: light;
   --bg: #f4efe8;
   --card: #ffffff;
@@ -11,6 +17,8 @@
   --accent: #c8553d;
   --on: #ffffff;
 }
+
+
 
 html {
   scroll-padding-top: env(safe-area-inset-top, 0px);
@@ -46,13 +54,13 @@ html, body {
   --on: #1f1612;
 }
 
+
 body {
   -webkit-user-select: none;
   user-select: none;
   touch-action: manipulation;
   background: var(--bg);
   color: var(--ink);
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 input, select {
