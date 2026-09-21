@@ -8,7 +8,7 @@ import { buildICS, parseEvents, isoDate } from './ics.js';
 
 const { ICLOUD_EMAIL, ICLOUD_APP_PASSWORD, CALENDAR_NAME = 'Family', REMINDERS_CALENDAR, DINNER_CALENDAR, PORT = 3000 } = process.env;
 if (!ICLOUD_EMAIL || !ICLOUD_APP_PASSWORD) {
-  console.error('Missing ICLOUD_EMAIL or ICLOUD_APP_PASSWORD. Copy .env.example to .env and fill it in.');
+  console.error('Missing ICLOUD_EMAIL or ICLOUD_APP_PASSWORD. Copy .env_sample to .env and fill it in.');
   process.exit(1);
 }
 
