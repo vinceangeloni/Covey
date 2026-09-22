@@ -106,11 +106,11 @@ Interface preferences—such as theme, text size, selected view, and calendar vi
 
 Your calendar data remains in iCloud, subject to Apple's account and calendar settings.
 
-## Add Covey to an iPad Home Screen
+## Add Covey to an iPad or Android Tablet Home Screen
 
-Run Covey on a computer or server that your device can reach, then open its address in Safari on iOS or iPadOS. Use **Share → Add to Home Screen**.
+Run Covey on a computer or server that your device can reach, then open its address in your browser. Use **Share → Add to Home Screen**.
 
-Covey includes iOS-specific app icons and a launch screen, so the Home Screen shortcut uses the Covey branding rather than a generic browser icon.
+Covey includes OS-specific app icons and a launch screen, so the Home Screen shortcut uses the Covey branding rather than a generic browser icon.
 
 ## Open source
 
