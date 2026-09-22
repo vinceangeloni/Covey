@@ -92,7 +92,7 @@
                 />
             </svg>
             <div
-                class="text-on text-2xl font-bold tracking-[0.2em] uppercase splash-word"
+                class="text-on text-3xl font-medium splash-word"
             >
                 Covey
             </div>
@@ -268,11 +268,24 @@
                         placeholder="Add an event"
                         maxlength="80"
                     />
-                    <input
-                        id="time"
-                        type="time"
-                        class="bg-bg border border-line rounded-lg p-2 min-w-0"
-                    />
+                    <label
+                        id="timewrap"
+                        class="text-xs text-mute"
+                        >Start time<input
+                            id="time"
+                            type="time"
+                            aria-label="Start time"
+                            class="mt-1 w-full bg-bg border border-line rounded-lg p-2 text-ink"
+                    /></label>
+                    <label
+                        id="endtimewrap"
+                        class="text-xs text-mute"
+                        >End time<input
+                            id="endtime"
+                            type="time"
+                            aria-label="End time"
+                            class="mt-1 w-full bg-bg border border-line rounded-lg p-2 text-ink"
+                    /></label>
                     <select
                         id="who"
                         class="bg-bg border border-line rounded-lg p-2 min-w-0"

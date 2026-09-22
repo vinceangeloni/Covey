@@ -9,14 +9,17 @@ const esc = s => String(s).replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/
 export const isoDate = d => iso(d.getFullYear(), d.getMonth() + 1, d.getDate());
 
 // Build a single-event .ics. Times are "floating" (same wall-clock time on every device).
-export function buildICS({ uid, title, date, time, member, alarm }) {
+export function buildICS({ uid, title, date, time, endTime, member, alarm }) {
   const [y, mo, da] = date.split('-').map(Number);
   const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
   let when;
   if (time) {
     const [h, mi] = time.split(':').map(Number);
     const start = new Date(y, mo - 1, da, h, mi);
-    const end = new Date(y, mo - 1, da, h + 1, mi);
+    const [eh, emi] = (endTime || "").split(":").map(Number);
+    const end = endTime
+      ? new Date(y, mo - 1, da, eh, emi)
+      : new Date(y, mo - 1, da, h + 1, mi);
     when = [`DTSTART:${ymd(start)}T${hms(start)}`, `DTEND:${ymd(end)}T${hms(end)}`];
   } else {
     when = [`DTSTART;VALUE=DATE:${ymd(new Date(y, mo - 1, da))}`, `DTEND;VALUE=DATE:${ymd(new Date(y, mo - 1, da + 1))}`];

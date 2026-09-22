@@ -1105,10 +1105,11 @@
                     dinner: "What's for dinner?",
                 }[addKind];
                 const who = addKind === "event" && nAct > 1;
+                const timed = addKind !== "dinner";
                 $("who").style.display = who ? "" : "none";
-                $("time").style.display = addKind === "dinner" ? "none" : "";
-                $("time").style.gridColumn =
-                    addKind === "dinner" || who ? "" : "1 / 3";
+                $("who").style.gridColumn = who ? "1 / 3" : "";
+                $("timewrap").style.display = timed ? "" : "none";
+                $("endtimewrap").style.display = timed ? "" : "none";
             }
             // Create an event locally in preview mode or send it to the server,
             // then reload the active range so the new event is rendered normally.
@@ -1119,6 +1120,7 @@
                     t,
                     d: sel,
                     tm: addKind === "dinner" ? "" : $("time").value,
+                    te: addKind === "dinner" ? "" : $("endtime").value,
                     kind: addKind,
                 };
                 if (addKind === "event") b.m = M[+$("who").value].n;
@@ -1134,6 +1136,8 @@
                     }
                     $("title").value = "";
                     $("time").value = "";
+                    $("endtime").value = "";
+                    closeSheet();
                     await load();
                 } catch (e) {
                     status(e.message);
