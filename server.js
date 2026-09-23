@@ -112,8 +112,8 @@ app.post('/api/events', wrap(async (req, res) => {
     filename: `${uid}.ics`,
     iCalString: buildICS({
       uid, title: t.trim(), date: d,
-      time: kind === 'dinner' ? '' : tm,        // dinner is an all-day entry
-      endTime: kind === 'dinner' ? '' : te,     // optional; defaults to one hour after start
+      time: kind === 'event' ? tm : '',        // reminders and dinner are all-day entries
+      endTime: kind === 'event' ? te : '',     // optional; defaults to one hour after start
       member: kind === 'event' ? m : '',        // people tags only on the shared calendar
       alarm: kind === 'reminder',               // reminders alert on the phone
     }),

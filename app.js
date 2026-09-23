@@ -1105,7 +1105,7 @@
                     dinner: "What's for dinner?",
                 }[addKind];
                 const who = addKind === "event" && nAct > 1;
-                const timed = addKind !== "dinner";
+                const timed = addKind === "event";
                 $("who").style.display = who ? "" : "none";
                 $("who").style.gridColumn = who ? "1 / 3" : "";
                 $("timewrap").style.display = timed ? "" : "none";
@@ -1119,8 +1119,8 @@
                 const b = {
                     t,
                     d: sel,
-                    tm: addKind === "dinner" ? "" : $("time").value,
-                    te: addKind === "dinner" ? "" : $("endtime").value,
+                    tm: addKind === "event" ? $("time").value : "",
+                    te: addKind === "event" ? $("endtime").value : "",
                     kind: addKind,
                 };
                 if (addKind === "event") b.m = M[+$("who").value].n;
