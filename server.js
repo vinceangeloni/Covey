@@ -97,9 +97,11 @@ app.get('/api/events', wrap(async (req, res) => {
 }));
 
 app.post('/api/events', wrap(async (req, res) => {
-  const { t, d, tm = '', m = 'Family', kind = 'event' } = req.body || {};
+  const { t, d, tm = '', te = '', m = 'Family', kind = 'event' } = req.body || {};
+  const validTime = value => /^(\d{2}:\d{2})?$/.test(value);
   if (typeof t !== 'string' || !t.trim() || t.length > 80 || !/^\d{4}-\d{2}-\d{2}$/.test(d) ||
-      !/^(\d{2}:\d{2})?$/.test(tm) || typeof m !== 'string' || m.length > 40 || typeof kind !== 'string') {
+      !validTime(tm) || !validTime(te) || (te && (!tm || te <= tm)) ||
+      typeof m !== 'string' || m.length > 40 || typeof kind !== 'string') {
     return res.status(400).json({ error: 'Invalid event' });
   }
   const { client, cals } = await connect();
@@ -110,7 +112,8 @@ app.post('/api/events', wrap(async (req, res) => {
     filename: `${uid}.ics`,
     iCalString: buildICS({
       uid, title: t.trim(), date: d,
-      time: kind === 'dinner' ? '' : tm,        // dinner is an all-day entry
+      time: kind === 'event' ? tm : '',        // reminders and dinner are all-day entries
+      endTime: kind === 'event' ? te : '',     // optional; defaults to one hour after start
       member: kind === 'event' ? m : '',        // people tags only on the shared calendar
       alarm: kind === 'reminder',               // reminders alert on the phone
     }),
