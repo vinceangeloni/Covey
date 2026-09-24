@@ -40,6 +40,16 @@ Covey connects to iCloud using CalDAV. Apple requires an app-specific password f
 
 You will use your Apple ID email address and this generated password in Covey's environment configuration.
 
+## Installing
+
+Install via Github by downloading this package to your device or by using npm.
+
+via git clone:
+``` git clone https://github.com/vinceangeloni/Covey/ ```
+
+via npm:
+``` npm install covey-calendar ```
+
 ## Configuration
 
 Copy the sample configuration file to `.env`:
