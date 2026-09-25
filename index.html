@@ -294,9 +294,37 @@
                     ></select>
                     <button
                         id="go"
-                        class="col-span-2 bg-accent text-on rounded-lg py-2.5 font-semibold"
+                        aria-busy="false"
+                        class="col-span-2 flex w-full items-center justify-center gap-2 rounded-lg bg-accent py-2.5 font-semibold text-on disabled:cursor-wait disabled:opacity-60"
                     >
-                        Add
+                        <span id="go-label">Add</span>
+                        <span
+                            id="go-progress"
+                            class="hidden flex items-center justify-center gap-2"
+                        >
+                            <svg
+                                class="h-4 w-4 animate-spin"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                aria-hidden="true"
+                            >
+                                <circle
+                                    cx="12"
+                                    cy="12"
+                                    r="9"
+                                    stroke="currentColor"
+                                    stroke-opacity="0.25"
+                                    stroke-width="3"
+                                />
+                                <path
+                                    d="M21 12a9 9 0 0 0-9-9"
+                                    stroke="currentColor"
+                                    stroke-width="3"
+                                    stroke-linecap="round"
+                                />
+                            </svg>
+                            <span id="go-progress-label">Saving…</span>
+                        </span>
                     </button>
                 </div>
                 <p class="status text-xs text-accent mt-2 min-h-4"></p>
