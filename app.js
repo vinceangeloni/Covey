@@ -430,7 +430,6 @@
                         );
                     p.style.background = m.c;
                     p.style.color = INK;
-                    p.style.borderLeft = "3px solid " + m.d;
                     c.append(tag(p, e));
                 });
                 if (list.length > max)
@@ -598,7 +597,6 @@
                                 );
                             p.style.background = m.c;
                             p.style.color = INK;
-                            p.style.borderLeft = "3px solid " + m.d;
                             c.append(tag(p, e));
                         });
                         c.onclick = () => openSheet(keys[i]);
@@ -652,9 +650,7 @@
                             "% - 4px);background:" +
                             m.c +
                             ";color:" +
-                            INK +
-                            ";border-left:4px solid " +
-                            m.d;
+                            INK;
                         if (h >= 52)
                             p.append(
                                 el(
