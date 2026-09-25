@@ -1169,9 +1169,22 @@
             }
             // Create an event locally in preview mode or send it to the server,
             // then reload the active range so the new event is rendered normally.
+            let adding = false;
+            function setAdding(value) {
+                const button = $("go");
+                adding = value;
+                button.disabled = value;
+                button.setAttribute("aria-busy", value);
+                $("go-label").classList.toggle("hidden", value);
+                $("go-progress").classList.toggle("hidden", !value);
+                $("go-progress-label").textContent = demo
+                    ? "Saving…"
+                    : "Saving to iCloud…";
+            }
             async function add() {
                 const t = $("title").value.trim();
-                if (!t) return;
+                if (!t || adding) return;
+                setAdding(true);
                 const b = {
                     t,
                     d: sel,
@@ -1197,6 +1210,8 @@
                     await load();
                 } catch (e) {
                     status(e.message);
+                } finally {
+                    setAdding(false);
                 }
             }
             // Wire the static controls from index.html to the state and render
