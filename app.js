@@ -502,7 +502,41 @@
                     ends = [],
                     cend = 0;
                 const flush = () => {
-                    cl.forEach((i) => (i.n = ends.length));
+                    const primary = cl.reduce(
+                        (longest, item) =>
+                            item.f - item.s > longest.f - longest.s
+                                ? item
+                                : longest,
+                        cl[0],
+                    );
+                    const primaryDuration = primary
+                        ? primary.f - primary.s
+                        : 0;
+                    const peers = new Map();
+                    cl.forEach((i) => {
+                        const key = `${i.s}:${i.e.kind || "event"}`;
+                        if (!peers.has(key)) peers.set(key, []);
+                        peers.get(key).push(i);
+                    });
+                    cl.forEach((i) => {
+                        const group = peers.get(
+                            `${i.s}:${i.e.kind || "event"}`,
+                        );
+                        i.n = ends.length;
+                        i.primary = i === primary;
+                        i.primaryDuration = primaryDuration;
+                        i.sideBySide = group.length > 1;
+                        i.peerCount = group.length;
+                        i.peerIndex = group.indexOf(i);
+                        i.z = i.sideBySide
+                            ? 200 + i.peerIndex
+                            : i.primary
+                              ? 0
+                              : 1 +
+                                Math.round(
+                                    ((i.f - i.s) / primaryDuration) * 100,
+                                );
+                    });
                     cl = [];
                     ends = [];
                     cend = 0;
@@ -606,7 +640,8 @@
                 }
                 tg.append(head);
                 const body = el("div", "grid relative");
-                body.style.cssText = cols + ";height:" + 24 * H + "px";
+                body.style.cssText =
+                    cols + ";height:" + 24 * H + "px;z-index:0";
                 const gut = el("div", "relative");
                 for (let h = 1; h < 24; h++) {
                     const l = el(
@@ -638,19 +673,44 @@
                             "div",
                             "absolute rounded-lg px-2 py-1 overflow-hidden",
                         );
+                        const overlay =
+                                i.n > 1 && !i.primary && !i.sideBySide,
+                            width = i.sideBySide
+                                ? 100 / i.peerCount
+                                : overlay
+                                  ? Math.min(
+                                        84,
+                                        56 +
+                                            28 *
+                                                ((i.f - i.s) /
+                                                    i.primaryDuration),
+                                    )
+                                  : 100,
+                            left = i.sideBySide
+                                ? (100 * i.peerIndex) / i.peerCount
+                                : overlay
+                                  ? 100 - width
+                                  : 0,
+                            fill = overlay
+                                ? `color-mix(in srgb, ${m.c} 84%, var(--card))`
+                                : m.c;
                         p.style.cssText =
                             "top:" +
                             ((i.s / 60) * H + 1) +
                             "px;height:" +
                             h +
                             "px;left:calc(" +
-                            (i.l / i.n) * 100 +
+                            left +
                             "% + 2px);width:calc(" +
-                            100 / i.n +
+                            width +
                             "% - 4px);background:" +
                             m.c +
+                            ";background:" +
+                            fill +
                             ";color:" +
-                            INK;
+                            INK +
+                            ";border:2px solid var(--card);z-index:" +
+                            i.z;
                         if (h >= 52)
                             p.append(
                                 el(
